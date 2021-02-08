@@ -1,36 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>SVG Flower Generator</title>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat'>
+    <link rel="stylesheet" href="./style.css">
 
-<meta name="viewport" content="width=deivice-width, initial-scale=1.0">
-
-<title>
-    my repo documentation
-</title>
-
-<style>
-    h1, h2{
-        text-align: center;
-    }
-</style>
 </head>
+<style type="text/css">
+    .divcss5 img {
+        width: 100px;
+        height: 100px
+    }
+
+    @keyframes anim1 {
+
+        0% {
+            left: 50px;
+            top: 200px;
+        }
+
+        100% {
+            left: 100px;
+            top: 100px;
+        }
+
+    }
+
+    @keyframes anim2 {
+
+        0% {
+            left: 50px;
+            top: 200px;
+        }
+
+        100% {
+            left: 400px;
+            top: 200px;
+        }
+
+    }
+
+    @keyframes anim3 {
+
+        0% {
+            left: 500px;
+            top: 200px;
+        }
+
+        100% {
+            left: 800px;
+            top: 300px;
+        }
+
+    }
+
+    @keyframes anim4 {
+
+        0% {
+            left: 50px;
+            top: 200px;
+        }
+
+        100% {
+            left: 200px;
+            top: 400px;
+        }
+
+    }
+
+    @keyframes anim5 {
+
+        0% {
+            left: 50px;
+            top: 200px;
+        }
+
+        100% {
+            left: 50px;
+            top: 500px;
+        }
+
+    }
+
+
+</style>
+
+
 <body>
-    <header></header>
-<main>
-    <h1>
-        Hello World
-    </h1>
-    <h2>
-        This is going to be my documentation page.
-    </h2>
-</main>
+<!-- partial:index.partial.html -->
+<svg id="svg"></svg>
+
+<header>
+    <!-- <a href="https://codepen.io/collection/DPjZxo/" target="_blank">SVG Collection</a> -->
+</header>
+<footer>
+
+</footer>
+<!-- partial -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.0.3/chroma.min.js'></script>
+
+<script type="text/javascript" src="./script.js"></script>
+
+<img src="bee_2.png" id="bee" alt="" style="position:absolute;">
+
+<input type=button value=refrash onclick="location.reload()">
 </body>
-
-
-
-
-
 
 
 </html>
