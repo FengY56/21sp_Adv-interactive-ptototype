@@ -42,8 +42,8 @@ void draw() {
   if (isShowFlower) {
     if (abs(beeX-flowerX)<20&&abs(beeY-flowerY)<20) {
       gatherEnd = millis();
-      //3s time
-      if ((gatherEnd-gatherStart)>=3000) {
+      //2s time
+      if ((gatherEnd-gatherStart)>=1000) {
         gatherCompleted = true;
       }
     } else {
@@ -56,7 +56,7 @@ void draw() {
     if (gatherCompleted) {
       beeX+=4;
       //beeY-=2;
-      //nect loop
+      //net loop
       if (beeX>1920) {
         gatherCompleted = false;
         beeX=-100;
@@ -80,8 +80,8 @@ void draw() {
         isDrawed = true;
         isShowFlower = true;
         //bee speed
-        speedX = (flowerX+100)/100;
-        speedY = (flowerY+100)/100;
+        speedX = (flowerX+100)/50;
+        speedY = (flowerY+100)/50;
       }
     } else if (mouseButton == RIGHT) {//erase flower
       for (Flower flower : flowerList) {
