@@ -1,7 +1,12 @@
 import gifAnimation.*;
+import processing.serial.*;
+
+Serial myConnection;
 Gif bees;
 PImage bg;//background
-float flowerX, flowerY;//flower position
+float flowerX = 0;
+float flowerY = 0;//flower position
+int click = 0;
 float beeX=-100, beeY=-100, speedX, speedY;//bee position and speed
 PGraphics flower;//slower
 boolean isShowFlower = false;//show flower
@@ -9,25 +14,22 @@ boolean isDrawed = false;//if the flower has been drawed
 boolean gatherCompleted = false;//if the drawing if finished
 float beeSize = 0;//bee size
 int gatherStart, gatherEnd;//the start of the gathering and the end
-
 ArrayList<Flower> flowerList = new ArrayList<Flower>();//flower list
 
 void setup() {
   size(1920, 1080);
   imageMode(CENTER);
-
   bees = new Gif(this, "bees2.gif");//bee
   bees.loop();
   bg = loadImage("Grass2_Large.jpg");//bg
+  printArray(Serial.list());
+  myConnection = new Serial(this, Serial.list()[0], 9600);
+  myConnection.bufferUntil('\n');
 }
 
 void draw() {
   background(bg);   
-
-  //mouse indicator
-  ellipse(mouseX, mouseY, 30, 30);
-
-
+  ellipse(flowerX, flowerY, 30, 30); //indicator
   //show flower
   for (Flower flower : flowerList) {
     flower.show();
@@ -42,7 +44,6 @@ void draw() {
   noStroke();
   //bee
   ellipse(flowerX, flowerY, beeSize, beeSize);
-
   if (isShowFlower) {
     if (abs(beeX-flowerX)<20&&abs(beeY-flowerY)<20) {
       gatherEnd = millis();
@@ -75,12 +76,9 @@ void draw() {
   if (mousePressed) {
     if (mouseButton == LEFT) {
       if (flowerList.size()<=25&&(!isDrawed)) {//flower number not above 25
-        flowerX = mouseX;
-        flowerY = mouseY;
-
-        flowerList.add(new Flower(mouseX, mouseY));//add flower
-
-
+        //flowerX = mouseX; 
+        //flowerY = mouseY;
+        flowerList.add(new Flower(flowerX, flowerY));//add flower
         isDrawed = true;
         isShowFlower = true;
         //bee speed
@@ -132,4 +130,31 @@ class Flower {
       avaiable = false;
     }
   }
+}
+
+void serialEvent(Serial conn) {
+  String fromSerial = conn.readString();
+
+  if (fromSerial != null) {
+    fromSerial = trim(fromSerial);
+  
+
+  String [] data = split(fromSerial, ',');
+  printArray(data);
+  
+  if(data.length == 3){
+    click = int(data[0]);
+    flowerX = float(data[1]);
+    flowerX = map(flowerX, 0, 4096, 0, 1920);
+    flowerY = float(data[2]);
+    flowerY = map(flowerY, 0, 4096, 0, 1080);
+  }
+  
+  //ballX = float(data[1]);
+  //ballX = map(ballX, 0, 4096, 0, 1920);
+  
+  //ballY = float(data[2]);
+  //ballY = map(ballY, 0, 4096, 0, 1080);
+  }
+  //println(fromSerial);
 }
