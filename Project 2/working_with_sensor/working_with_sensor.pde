@@ -6,7 +6,8 @@ Gif bees;
 PImage bg;//background
 float flowerX = 0;
 float flowerY = 0;//flower position
-int click = 0;
+int rightClick = 0;
+int leftClick = 0;
 float beeX=-100, beeY=-100, speedX, speedY;//bee position and speed
 PGraphics flower;//slower
 boolean isShowFlower = false;//show flower
@@ -72,25 +73,24 @@ void draw() {
     }
     image(bees, beeX, beeY);//show bee
   }
-
-  if (mousePressed) {
-    if (mouseButton == LEFT) {
-      if (flowerList.size()<=25&&(!isDrawed)) {//flower number not above 25
+ 
+    if (rightClick == 1) {
+      if (flowerList.size()<=25&&(!isDrawed)) { //flower number not above 25
         //flowerX = mouseX; 
         //flowerY = mouseY;
-        flowerList.add(new Flower(flowerX, flowerY));//add flower
+        flowerList.add(new Flower(flowerX, flowerY)); //add flower
         isDrawed = true;
         isShowFlower = true;
         //bee speed
         speedX = (flowerX+100)/50;
         speedY = (flowerY+100)/50;
       }
-    } else if (mouseButton == RIGHT) {//erase flower
+    } else if (leftClick == 1) { //erase flower
       for (Flower flower : flowerList) {
         flower.check(mouseX, mouseY);
       }
     }
-  }
+  
 }
 
 //flower
@@ -98,7 +98,6 @@ class Flower {
   float x, y;
   boolean avaiable = true;
   PGraphics flower;
-
   public Flower(float x, float y) {
     this.x = x;
     this.y = y;
@@ -137,16 +136,14 @@ void serialEvent(Serial conn) {
 
   if (fromSerial != null) {
     fromSerial = trim(fromSerial);
-  
-
   String [] data = split(fromSerial, ',');
   printArray(data);
-  
-  if(data.length == 3){
-    click = int(data[0]);
-    flowerX = float(data[1]);
+  if(data.length == 4){
+    rightClick = int(data[0]);
+    leftClick = int(data[1]);
+    flowerX = float(data[2]);
     flowerX = map(flowerX, 0, 4096, 0, 1920);
-    flowerY = float(data[2]);
+    flowerY = float(data[3]);
     flowerY = map(flowerY, 0, 4096, 0, 1080);
   }
   
