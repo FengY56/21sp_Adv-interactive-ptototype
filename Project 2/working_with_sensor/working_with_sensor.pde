@@ -29,6 +29,8 @@ void setup() {
 }
 
 void draw() {
+  float rFx = random(300, 1000);
+  float rFy = random(300, 1000);
   background(bg);   
   ellipse(flowerX, flowerY, 30, 30); //indicator
   //show flower
@@ -36,7 +38,7 @@ void draw() {
     flower.show();
   }
   if (beeSize<30&&!gatherCompleted&&isShowFlower) {
-    beeSize+=0.2;//show bee animation
+    beeSize += 0.2;//show bee animation
   }
   if (gatherCompleted) {
     beeSize = 0;//bee turn 0 after gathering
@@ -48,7 +50,7 @@ void draw() {
   if (isShowFlower) {
     if (abs(beeX-flowerX)<20&&abs(beeY-flowerY)<20) {
       gatherEnd = millis();
-      //2s time
+      //1s
       if ((gatherEnd-gatherStart)>=1000) {
         gatherCompleted = true;
       }
@@ -73,33 +75,30 @@ void draw() {
     }
     image(bees, beeX, beeY);//show bee
   }
- 
-    if (rightClick == 1) {
-      if (flowerList.size()<=25&&(!isDrawed)) { //flower number not above 25
-        //flowerX = mouseX; 
-        //flowerY = mouseY;
-        flowerList.add(new Flower(flowerX, flowerY)); //add flower
-        isDrawed = true;
-        isShowFlower = true;
-        //bee speed
-        speedX = (flowerX+100)/50;
-        speedY = (flowerY+100)/50;
-      }
-    } else if (randomClick == 1) { //random flower show up
-      if (flowerList.size()<=25&&(!isDrawed)) { //flower number not above 25
-        //flowerX = mouseX; 
-        //flowerY = mouseY;
-        flowerList.add(new Flower(random(100, 1800), random(100, 1000))); //add flower
-        isDrawed = true;
-        isShowFlower = true;
-        //bee speed
-        speedX = (flowerX+100)/50;
-        speedY = (flowerY+100)/50;
-      }
+  if (rightClick == 1) {
+    if (flowerList.size()<=25&&(!isDrawed)) { //flower number not above 25
+      flowerList.add(new Flower(flowerX, flowerY)); //add flower
+      isDrawed = true;
+      isShowFlower = true;
+      //bee speed
+      speedX = (flowerX+100)/50;
+      speedY = (flowerY+100)/50;
     }
-  
+  }
+  if (randomClick == 1) { //random flower show up
+    if (flowerList.size()<=25&&(!isDrawed)) { //flower number not above 25
+    flowerX = rFx;
+    flowerY = rFy;
+    flowerList.add(new Flower(rFx, rFy)); //add flower
+    isDrawed = true;
+    isShowFlower = true;
+    //bee speed
+    speedX = (flowerX+100)/50;
+    speedY = (flowerY+100)/50;
+    }
+    
+  }
 }
-
 //flower
 class Flower {
   float x, y;
@@ -140,25 +139,17 @@ class Flower {
 
 void serialEvent(Serial conn) {
   String fromSerial = conn.readString();
-
   if (fromSerial != null) {
     fromSerial = trim(fromSerial);
-  String [] data = split(fromSerial, ',');
-  printArray(data);
-  if(data.length == 4){
-    rightClick = int(data[0]);
-    leftClick = int(data[1]);
-    flowerX = float(data[2]);
-    flowerX = map(flowerX, 0, 4096, 0, 1920);
-    flowerY = float(data[3]);
-    flowerY = map(flowerY, 0, 4096, 0, 1080);
+    String [] data = split(fromSerial, ',');
+    printArray(data);
+    if (data.length == 4) {
+      rightClick = int(data[0]);
+      randomClick = int(data[1]);
+      flowerX = float(data[2]);
+      flowerX = map(flowerX, 0, 4096, 0, 1920);
+      flowerY = float(data[3]);
+      flowerY = map(flowerY, 0, 4096, 0, 1080);
+    }
   }
-  
-  //ballX = float(data[1]);
-  //ballX = map(ballX, 0, 4096, 0, 1920);
-  
-  //ballY = float(data[2]);
-  //ballY = map(ballY, 0, 4096, 0, 1080);
-  }
-  //println(fromSerial);
 }
