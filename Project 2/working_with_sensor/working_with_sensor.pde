@@ -7,7 +7,7 @@ PImage bg;//background
 float flowerX = 0;
 float flowerY = 0;//flower position
 int rightClick = 0;
-int leftClick = 0;
+int randomClick = 0;
 float beeX=-100, beeY=-100, speedX, speedY;//bee position and speed
 PGraphics flower;//slower
 boolean isShowFlower = false;//show flower
@@ -85,9 +85,16 @@ void draw() {
         speedX = (flowerX+100)/50;
         speedY = (flowerY+100)/50;
       }
-    } else if (leftClick == 1) { //erase flower
-      for (Flower flower : flowerList) {
-        flower.check(mouseX, mouseY);
+    } else if (randomClick == 1) { //random flower show up
+      if (flowerList.size()<=25&&(!isDrawed)) { //flower number not above 25
+        //flowerX = mouseX; 
+        //flowerY = mouseY;
+        flowerList.add(new Flower(random(100, 1800), random(100, 1000))); //add flower
+        isDrawed = true;
+        isShowFlower = true;
+        //bee speed
+        speedX = (flowerX+100)/50;
+        speedY = (flowerY+100)/50;
       }
     }
   
