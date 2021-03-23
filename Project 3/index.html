@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Expression with P5js</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let baseURL = "https://api.particle.io/v1/devices/300044001847393035313137/";
+        let token = "?access_token=13a834cb8b030dc651af854c81a23ac39f251b03";
+        let param1 = "rain";
+        let param2 = "color";
+        let data1URL = baseURL + param1 + token; //for rainsensor
+        let data2URL = baseURL + param2 + token; //for potentiometer 1
+
+        //TIMER vars:
+        let currentFactor, prevFactor;
+        let timeInterval = 1000;
+        let whichParam = 1;
+        let numberOfParams = 1; //number of sensors you have
+
+        //COLOR vars:
+        let mySize = 200;
+        //let mySat = 100;
+
+        let r = 0;
+
+        function setup(){
+            createCanvas(1000, 1000);
+            //size(width, height);
+
+            currentFactor = 0;
+            prevFactor = 0;
+
+            colorMode(RGB);
+        }
+
+        function draw(){
+            //background(204, 204, 255, 10);
+            background(255);
+            noStroke();
+            fill(random(100, 200), 204, 255);
+            // for i in range 200:
+            //   if r < 200
+            //     r = r + 1;
+            ellipse(width/2, height/2, mySize, mySize);
+            textSize(32);
+            textAlign(CENTER);
+            fill(0, 76,153);
+            s = mySize;
+            text(s, mouseX, mouseY);
+          
+
+            currentFactor = millis() % timeInterval;
+            if(currentFactor < prevFactor){ //passed an interval
+                if(whichParam == 1){
+                    loadJSON(data1URL, dataHandle, errorHandle);
+                }
+                else{
+                    loadJSON(data2URL, dataHandle, errorHandle);
+                }
+                whichParam++;
+                if(whichParam == (numberOfParams+1)) whichParam = 1;
+            }
+
+            prevFactor = currentFactor; // prep for the next frame
+        }
+
+        function dataHandle(JSONdata){
+            console.log(JSONdata);
+            if(JSONdata.name === "rain"){ //
+                mySize = map(parseInt(JSONdata.result), 4096, 0, 200, 800);
+            }
+            // else if(JSONdata.name === "pot2") {
+            //     mySat = map(parseInt(JSONdata.result), 0, 4096, 100, 500);
+            // }
+        }
+
+        function errorHandle(Error){
+            console.log("Error has occured: " + Error);
+        }
+    </script>
+</body>
+</html>
