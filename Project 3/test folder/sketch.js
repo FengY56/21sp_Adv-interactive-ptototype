@@ -1,17 +1,23 @@
+let baseURL = "https://api.particle.io/v1/devices/300044001847393035313137/";
+let token = "?access_token=13a834cb8b030dc651af854c81a23ac39f251b03";
+let param1 = "rain";
+let param2 = "color";
+let data1URL = baseURL + param1 + token; //for rainsensor
+let data2URL = baseURL + param2 + token; //for potentiometer 1
+let whichParam = 1;
+let numberOfParams = 2; //number of sensors you have
+
 let Waterballs = [];
 //timer
 let currentFactor, prevFactor;
 let timeInterval = 1000;
 
 function setup() {
-    //createCanvas(screen.width, screen.height);
     createCanvas(screen.width, screen.height);
-    //colorMode(HSB, 100);
     int ;n = 100;
     for (let i = 0; i < n; i++) {
         Waterballs[i] = new Waterball(100 + i * 200, height/2, 100, 0);
     }
-    //print(Waterball.ballX, Waterball.ballY);
     currentFactor = 0;
     prevFactor = 0;
     print(n);

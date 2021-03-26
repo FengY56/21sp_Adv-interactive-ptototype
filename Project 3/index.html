@@ -33,13 +33,13 @@
         let currentFactor, prevFactor;
         let timeInterval = 1000;
         let whichParam = 1;
-        let numberOfParams = 1; //number of sensors you have
+        let numberOfParams = 2; //number of sensors you have
 
         //COLOR vars:
         let mySize = 200;
-        //let mySat = 100;
+        let b = 0;
 
-        let r = 0;
+        //let r = 0;
 
         function setup(){
             createCanvas(1000, 1000);
@@ -55,7 +55,7 @@
             //background(204, 204, 255, 10);
             background(255);
             noStroke();
-            fill(random(100, 200), 204, 255);
+            fill(200, 204, b);
             // for i in range 200:
             //   if r < 200
             //     r = r + 1;
@@ -65,6 +65,7 @@
             fill(0, 76,153);
             s = mySize;
             text(s, mouseX, mouseY);
+            text(b, mouseX - 20, mouseY -20);
           
 
             currentFactor = millis() % timeInterval;
@@ -87,9 +88,9 @@
             if(JSONdata.name === "rain"){ //
                 mySize = map(parseInt(JSONdata.result), 4096, 0, 200, 800);
             }
-            // else if(JSONdata.name === "pot2") {
-            //     mySat = map(parseInt(JSONdata.result), 0, 4096, 100, 500);
-            // }
+            else if(JSONdata.name === "color") {
+                 b = map(parseInt(JSONdata.result), 0, 4096, 0, 255);
+             }
         }
 
         function errorHandle(Error){
