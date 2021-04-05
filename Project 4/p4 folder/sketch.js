@@ -9,30 +9,24 @@ let numberOfParams = 2; //number of sensors you have
 let Waterballs = [];
 //timer
 let currentFactor, prevFactor;
-let timeInterval = 1000;
+let timeInterval = 5000;
 let ballSize = 100;
-let ballX = 100;
 function setup() {
-    createCanvas(1000, screen.height);
-    for (let i = 0; i < 8; i++) {
-        Waterballs[i] = new Waterball(ballX + i * 150, height/2, ballSize, 0);
-            if (ballX + i * 150 > 900) {
-                ballX = ballX - 300
-            }
-            print(ballX);
+    createCanvas(1000, 1000);
+    for (let i = 0; i < 1; i++) {
+        Waterballs[i] = new Waterball((i*150) + 100, height/2, ballSize, 0);
     }
     currentFactor = 0;
     prevFactor = 0;
+    colorMode(HSB, 360, 100, 100, 10);
 }
 
 function draw() {
-    background(56, 132, 207);
-    for (let i = 0; i < Waterballs.length; i++) {
-        Waterballs[i].show();
-        Waterballs[i].rollover();
-    }
+    background(219, 10, 100);
     currentFactor = millis() % timeInterval;
-    if (currentFactor < prevFactor) { // pass a interval
+    if (currentFactor < prevFactor) {
+        let lastWBx = Waterballs[Waterballs.length - 1].ballX;
+        Waterballs.push(new Waterball(lastWBx + 300, height/2, ballSize));
         if (whichParam == 1) {
             loadJSON(data1URL, dataHandle, errorHandle);
         }
@@ -42,6 +36,10 @@ function draw() {
         whichParam++;
         if (whichParam == (numberOfParams + 1)) whichParam = 1;
     }
+    Waterballs.forEach(wBall => {
+        wBall.show();
+        wBall.rollover();
+    })
     prevFactor = currentFactor;
 }
 
@@ -55,7 +53,7 @@ function dataHandle(JSONdata) {
         b = map(parseInt(JSONdata.result), 4096, 0, 100, 200);
     }
     else if (JSONdata.name === "color") {
-        ballSize = map(parseInt(JSONdata.result), 0, 4096, 100, 300);
+        ballSize = map(parseInt(JSONdata.result), 0, 4096, 100, 400);
     }
 }
 
@@ -64,17 +62,17 @@ class Waterball {
     constructor(ballX, ballY, ballSize, opaci) {
         this.ballX = ballX;
         this.ballY = ballY;
-        //this.ballSize = ballSize;
-        this.opaci = opaci;
+        this.ballSize = ballSize;
+        this.opaci = opaci; 
     }
 
     show() {
         noStroke();
-        fill(212, 241, 249);
-        ellipse(this.ballX, this.ballY, ballSize);
+        fill(0, this.opaci);
         textSize(16);
         textAlign(CENTER, CENTER);
-        fill(0, this.opaci);
+        fill(212, 100, 100);
+        ellipse(this.ballX, this.ballY, this.ballSize);
     }
 
     // clicked() {
@@ -91,15 +89,22 @@ class Waterball {
             fill(0);
             textAlign(CENTER, CENTER);
             text(ballSize, this.ballX, this.ballY);
-            if (ballSize < 600) {
+            if (ballSize < 200) {
                 text('not much water', this.ballX, this.ballY - 30);
             }
-            else if (ballSize > 600 && ballSize < 700) {
+            else if (ballSize > 200 && ballSize < 300) {
                 text('medium amount of water', this.ballX, this.ballY - 30);
             }
-            else if (ballSize > 700 && ballSize < 800) {
+            else if (ballSize > 300 && ballSize < 400) {
                 text('lots of water', this.ballX, this.ballY - 30);
             }
         }
     }
 }
+function mouseWheel(event) {
+    console.log(event);
+    event.stopPropagation();
+    Waterballs.forEach(wBall => {
+        wBall.ballX += event.delta;
+    })
+} 
