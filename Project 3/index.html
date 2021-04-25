@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +9,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.js"></script>
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -20,6 +22,7 @@
         }
     </style>
 </head>
+
 <body>
     <script>
         let baseURL = "https://api.particle.io/v1/devices/300044001847393035313137/";
@@ -39,19 +42,16 @@
         let mySize = 200;
         let b = 0;
 
-        //let r = 0;
-
-        function setup(){
+        function setup() {
             createCanvas(1000, 1000);
             //size(width, height);
-
             currentFactor = 0;
             prevFactor = 0;
-
+            textAlign(CENTER);
             colorMode(RGB);
         }
 
-        function draw(){
+        function draw() {
             //background(204, 204, 255, 10);
             background(255);
             noStroke();
@@ -59,43 +59,44 @@
             // for i in range 200:
             //   if r < 200
             //     r = r + 1;
-            ellipse(width/2, height/2, mySize, mySize);
+            ellipse(width / 2, height / 2, mySize, mySize);
             textSize(32);
             textAlign(CENTER);
-            fill(0, 76,153);
+            fill(0, 76, 153);
             s = mySize;
-            text(s, mouseX, mouseY);
-            text(b, mouseX - 20, mouseY -20);
-          
+            text('SIZE: ' + s, mouseX, mouseY);
+            text('COLOR: ' + b, mouseX - 20, mouseY - 30);
+
 
             currentFactor = millis() % timeInterval;
-            if(currentFactor < prevFactor){ //passed an interval
-                if(whichParam == 1){
+            if (currentFactor < prevFactor) { //passed an interval
+                if (whichParam == 1) {
                     loadJSON(data1URL, dataHandle, errorHandle);
                 }
-                else{
+                else {
                     loadJSON(data2URL, dataHandle, errorHandle);
                 }
                 whichParam++;
-                if(whichParam == (numberOfParams+1)) whichParam = 1;
+                if (whichParam == (numberOfParams + 1)) whichParam = 1;
             }
 
             prevFactor = currentFactor; // prep for the next frame
         }
 
-        function dataHandle(JSONdata){
+        function dataHandle(JSONdata) {
             console.log(JSONdata);
-            if(JSONdata.name === "rain"){ //
+            if (JSONdata.name === "rain") { //
                 mySize = map(parseInt(JSONdata.result), 4096, 0, 200, 800);
             }
-            else if(JSONdata.name === "color") {
-                 b = map(parseInt(JSONdata.result), 0, 4096, 0, 255);
-             }
+            else if (JSONdata.name === "color") {
+                b = map(parseInt(JSONdata.result), 0, 4096, 0, 255);
+            }
         }
 
-        function errorHandle(Error){
+        function errorHandle(Error) {
             console.log("Error has occured: " + Error);
         }
     </script>
 </body>
+
 </html>
